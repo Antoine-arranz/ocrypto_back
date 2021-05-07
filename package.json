@@ -1,0 +1,36 @@
+{
+  "name": "ocrypto",
+  "version": "1.0.0",
+  "description": "cryptocurrency waller tracker",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon --exec \"ts-node --transpile-only --project tsconfig.json\" src/index.ts",
+    "build:prod": "set NODE_ENV=production && tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Antoine-arranz/ocrypto.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Antoine-arranz/ocrypto/issues"
+  },
+  "homepage": "https://github.com/Antoine-arranz/ocrypto#readme",
+  "dependencies": {
+    "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
+    "dotenv": "^9.0.0",
+    "express": "^4.17.1",
+    "logger": "^0.0.1",
+    "pg": "^8.6.0",
+    "sequelize": "^6.6.2",
+    "winston": "^3.3.3"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.2.4"
+  }
+}
