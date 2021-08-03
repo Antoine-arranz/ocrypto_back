@@ -4,3 +4,8 @@ export interface UserCreateI {
   lastName: string;
   firstName: string;
 }
+
+export interface UserLoginI {
+  email: string;
+  password: string;
+}

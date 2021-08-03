@@ -13,3 +13,19 @@ export class UserAlreadyExist extends CustomError {
     super(`This user already exist`);
   }
 }
+
+export class AuthenticationFailedError extends CustomError {
+  public httpCode = 401;
+
+  constructor() {
+    super(`authentication failed, incorrect email or password`);
+  }
+}
+
+export class AccountNotValidatedError extends CustomError {
+  public httpCode = 403;
+
+  constructor() {
+    super(`you haven't validated your account yet`);
+  }
+}

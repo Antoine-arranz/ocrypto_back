@@ -11,3 +11,8 @@ export const signupSchema = Joi.object().keys({
   firstName: name,
   country: Joi.string().length(2).trim().uppercase(),
 });
+
+export const loginSchema = Joi.object().keys({
+  email: email.required(),
+  password: passwordSchema,
+});

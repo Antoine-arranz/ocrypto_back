@@ -8,7 +8,7 @@
    "synchronize": false,
    "logging": false,
    "entities": [
-      "src/storage/model/entity/**/*.ts"
+      "src/storage/typeORM/entity/**/*.ts"
    ],
    "migrations" :["src/storage/model/migration/*.ts"],
    "cli": {
