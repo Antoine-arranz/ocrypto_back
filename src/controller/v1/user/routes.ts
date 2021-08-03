@@ -4,6 +4,8 @@ import customErrorResponse from "../middlewares/customsErrorResponse";
 import { userSchemas } from "../../../interfaces/joi";
 import { User } from "../../../service";
 
+import MongoDbToken from "../../../config/mongodb";
+
 export default () => {
   const UserService = new User();
 
