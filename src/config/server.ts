@@ -15,11 +15,11 @@ export default () => {
     extended: true,
   });
 
-  // apiRouter.use(cookieParser());
-  // apiRouter.use(urlencodedParser);
-  // apiRouter.use(bodyParser.json());
-  // apiRouter.use(bodyParser.text());
-  // apiRouter.use(cors("*"));
+  apiRouter.use(cookieParser());
+  apiRouter.use(urlencodedParser);
+  apiRouter.use(bodyParser.json());
+  apiRouter.use(bodyParser.text());
+  apiRouter.use(cors("*"));
 
   app.use("/api", apiRouter);
 
