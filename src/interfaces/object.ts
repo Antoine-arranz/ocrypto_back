@@ -9,3 +9,10 @@ export interface UserLoginI {
   email: string;
   password: string;
 }
+
+export interface TokenI{
+  _id : string,
+  token : string,
+  createdAt : Date,
+  expiration : number
+}

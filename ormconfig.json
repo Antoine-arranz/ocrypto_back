@@ -5,11 +5,11 @@
    "username": "postgres",
    "password": "postgres",
    "database": "ocrypto",
-   "synchronize": false,
+   "synchronize": true,
    "logging": false,
    "entities": [
       "src/storage/typeORM/entity/**/*.ts"
-   ],
+   ], 
    "migrations" :["src/storage/model/migration/*.ts"],
    "cli": {
       "entitiesDir": "src/storage/model/entity",
