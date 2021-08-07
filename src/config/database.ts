@@ -8,7 +8,7 @@ export default (env) => ({
     name: env.DB_DEV_POSTGRES_OCRYPTO_NAME,
   },
   mongodb: {
-    uri: `mongodb+srv://ocrypto:${env.DB_DEV_MONGODB_OCRYPTO_PASSWORD}@cluster0.ndvfh.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`,
+    uri: `mongodb+srv://ocrypto:${env.DB_DEV_MONGODB_OCRYPTO_PASSWORD}@cluster0.ndvfh.mongodb.net/`,
     token: `token`,
     tokenCollection: `userToken`,
   },

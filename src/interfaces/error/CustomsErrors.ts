@@ -29,3 +29,12 @@ export class AccountNotValidatedError extends CustomError {
     super(`you haven't validated your account yet`);
   }
 }
+
+
+export class AuthenticationError extends CustomError {
+	public httpCode = 401;
+
+	constructor() {
+		super(`you must be authenticated to do this`);
+	}
+}
