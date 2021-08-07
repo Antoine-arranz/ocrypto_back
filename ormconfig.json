@@ -5,7 +5,7 @@
    "username": "postgres",
    "password": "postgres",
    "database": "ocrypto",
-   "synchronize": false,
+   "synchronize": true,
    "logging": false,
    "entities": [
       "src/storage/typeORM/entity/**/*.ts"

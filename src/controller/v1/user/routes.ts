@@ -12,7 +12,7 @@ export default () => {
 
   const router = express.Router({ mergeParams: true });
 
-  router.post("/test", async (req: Request, res: Response) => {
+  router.post("/signIn", async (req: Request, res: Response) => {
     try {
       const data = await userSchemas.signupSchema.validateAsync(req.body);
       const newUser = await UserService.create(data);

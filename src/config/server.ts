@@ -19,7 +19,12 @@ export default () => {
   apiRouter.use(urlencodedParser);
   apiRouter.use(bodyParser.json());
   apiRouter.use(bodyParser.text());
-  apiRouter.use(cors("*"));
+  apiRouter.use(
+    cors({
+      credentials: true,
+      origin: ["http://localhost:3001"],
+    })
+  );
 
   app.use("/api", apiRouter);
 
