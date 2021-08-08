@@ -1,12 +1,14 @@
 import express, { Request, Response } from "express";
 import logger from "../../../config/logger";
 import customErrorResponse from "../middlewares/customsErrorResponse";
-import { userSchemas } from "../../../interfaces/joi";
+import { userSchemas, generalSchemas } from "../../../interfaces/joi";
 import { User } from "../../../service";
 import { authToken, generateToken } from "../../../config/Token";
 import jwt from "jsonwebtoken";
 import config from "../../../config";
 import privateRoute from "../middlewares/privateRoute";
+import validateAccount from "../middlewares/validateAccount";
+import checkToken from "../middlewares/checkToken";
 
 export default () => {
   const UserService = new User();
@@ -54,6 +56,63 @@ export default () => {
       return customErrorResponse(res, error);
     }
   });
+
+  router.get(
+    "/validate/:token",
+    validateAccount,
+    async (req: any, res: Response) => {
+      try {
+        await UserService.validate(req.token, req.params.token);
+        return res.status(200).json({ err: false });
+      } catch (error) {
+        logger.error(
+          `[user/validate/${JSON.stringify(req.params.token)}] - ${
+            error.message
+          }`
+        );
+        return customErrorResponse(res, error);
+      }
+    }
+  );
+
+  router.post("/resetPassword", async (req: Request, res: Response) => {
+    try {
+      const email = await generalSchemas.email.validateAsync(req.body.email);
+      await UserService.resetPassword(email);
+      return res.status(200).json({ err: false });
+    } catch (error) {
+      logger.error(
+        `[user/reset-password/${JSON.stringify(req.body)}] - ${error.message}`
+      );
+      return customErrorResponse(res, error);
+    }
+  });
+
+  router.patch(
+    "/updatePassword/:token",
+    checkToken,
+    async (req: any, res: Response) => {
+      try {
+        console.log("ici");
+        const password = await userSchemas.passwordSchema.validateAsync(
+          req.body.password
+        );
+        await UserService.updatePasswordWithToken(
+          req.token,
+          password,
+          req.params.token
+        );
+        return res.status(200).json({ err: false });
+      } catch (error) {
+        logger.error(
+          `[user/updatePassword/${JSON.stringify(req.params)}] - ${
+            error.message
+          }`
+        );
+        return customErrorResponse(res, error);
+      }
+    }
+  );
 
   router.use(privateRoute);
 

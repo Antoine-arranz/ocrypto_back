@@ -6,7 +6,6 @@ import config from "../../config";
 const generateToken = async (payload) => {
   const tokenWhiteList = await new MongoDb();
   const token: string = jwt.sign(payload, config.jwt.secret);
-  console.log(tokenWhiteList)
   const params = {
     token,
     createdAt: Date(),

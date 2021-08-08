@@ -14,6 +14,14 @@ export class UserAlreadyExist extends CustomError {
   }
 }
 
+export class UserNotExist extends CustomError {
+  public httpCode = 403;
+
+  constructor() {
+    super(`This user does not exist`);
+  }
+}
+
 export class AuthenticationFailedError extends CustomError {
   public httpCode = 401;
 
@@ -30,11 +38,26 @@ export class AccountNotValidatedError extends CustomError {
   }
 }
 
-
 export class AuthenticationError extends CustomError {
-	public httpCode = 401;
+  public httpCode = 401;
 
-	constructor() {
-		super(`you must be authenticated to do this`);
-	}
+  constructor() {
+    super(`you must be authenticated to do this`);
+  }
+}
+
+export class AccountAlreadyValidatedError extends CustomError {
+  public httpCode = 406;
+
+  constructor() {
+    super(`your account is already validated`);
+  }
+}
+
+export class TokenExpiredError extends CustomError {
+  public httpCode = 403;
+
+  constructor() {
+    super(`the token has expired and is no longer valid`);
+  }
 }
