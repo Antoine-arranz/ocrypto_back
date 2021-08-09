@@ -62,6 +62,7 @@ export default () => {
     validateAccount,
     async (req: any, res: Response) => {
       try {
+        console.log('ici ?')
         await UserService.validate(req.token, req.params.token);
         return res.status(200).json({ err: false });
       } catch (error) {
