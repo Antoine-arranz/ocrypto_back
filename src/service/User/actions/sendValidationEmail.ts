@@ -18,7 +18,7 @@ const sendValidationEmail = async (
     from: "ocryptozz@gmail.com",
     to: `antoine_arranz@hotmail.com`,
     subject: "Contact request",
-    text: `please verify your email with this link : ${config.api.front.full}/login/${token}`,
+    text: `please verify your email with this link : ${config.api.front.full}/login/validate/${token}`,
   };
 
   transporter.sendMail(mailOptions);

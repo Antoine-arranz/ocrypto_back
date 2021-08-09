@@ -8,7 +8,6 @@ import { findOneUserById } from "../../../storage/typeORM/entity/User/Repositori
 
 export default async (req, res, next) => {
   try {
-    console.log('ici')
     const { token } = req.params;
     const decryptToken = jwt.verify(token, config.jwt.secret);
 

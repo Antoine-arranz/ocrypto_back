@@ -9,8 +9,6 @@ import { TokenExpiredError } from "../../../interfaces/error/CustomsErrors";
 
 export default async (req, res, next) => {
   try {
-    console.log("iciicicii");
-
     const tokenWhitelist = new MongoDb();
 
     const { token } = req.params;

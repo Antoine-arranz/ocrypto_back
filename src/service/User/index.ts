@@ -28,9 +28,7 @@ class UserService {
     if (!user) {
       throw new AuthenticationFailedError();
     }
-    console.log(data.password, user?.password);
     const passwordMatch = await bcrypt.compare(data.password, user?.password);
-    console.log(passwordMatch);
     if (passwordMatch) {
       if (!user?.verified) throw new AccountNotValidatedError();
     } else {
