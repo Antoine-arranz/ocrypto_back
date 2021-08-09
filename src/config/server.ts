@@ -3,6 +3,7 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import express from "express";
 import * as http from "http";
+import routing from "./routing";
 import logger from "./logger";
 
 export default () => {
@@ -18,7 +19,12 @@ export default () => {
   apiRouter.use(urlencodedParser);
   apiRouter.use(bodyParser.json());
   apiRouter.use(bodyParser.text());
-  apiRouter.use(cors("*"));
+  apiRouter.use(
+    cors({
+      credentials: true,
+      origin: ["http://localhost:3001"],
+    })
+  );
 
   app.use("/api", apiRouter);
 
@@ -27,6 +33,7 @@ export default () => {
       console.log(req.method, req.originalUrl);
       next();
     });
+  routing(apiRouter);
 
   return {
     serverListen(port) {
