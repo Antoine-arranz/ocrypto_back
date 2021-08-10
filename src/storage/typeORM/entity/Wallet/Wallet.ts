@@ -24,7 +24,9 @@ export default class Wallet extends BaseEntity {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @ManyToOne(() => User, (User) => User.Wallet)
+  @Column()
+  User_Id: number;
+  @ManyToOne(() => User, (User) => User.Wallets)
   @JoinColumn({ name: "User_Id" })
   User: User;
 }

@@ -10,9 +10,13 @@ export interface UserLoginI {
   password: string;
 }
 
-export interface TokenI{
-  _id : string,
-  token : string,
-  createdAt : Date,
-  expiration : number
+export interface TokenI {
+  _id: string;
+  token: string;
+  createdAt: Date;
+  expiration: number;
+}
+
+export interface WalletI {
+  name: string;
 }

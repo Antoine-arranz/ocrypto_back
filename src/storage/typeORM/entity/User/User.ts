@@ -42,5 +42,5 @@ export default class User extends BaseEntity {
     onUpdate: "CASCADE",
     onDelete: "RESTRICT",
   })
-  Wallet: Wallet[];
+  Wallets: Wallet[];
 }
