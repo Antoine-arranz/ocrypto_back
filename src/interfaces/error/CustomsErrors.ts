@@ -61,3 +61,11 @@ export class TokenExpiredError extends CustomError {
     super(`the token has expired and is no longer valid`);
   }
 }
+
+export class WalletNotFound extends CustomError {
+  public httpCode = 403;
+
+  constructor() {
+    super(`This wallet does not exist`);
+  }
+}

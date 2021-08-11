@@ -15,7 +15,7 @@ export default () => {
       const userId = await generalSchemas.idSchema.validateAsync(
         req.params.userId
       );
-      const name = await generalSchemas.textSchema.validateAsync(req.body.data);
+      const name = await generalSchemas.textSchema.validateAsync(req.body.name);
       const wallet = await WalletService.create(userId, name);
       return res.status(200).json({ err: false, result: wallet });
     } catch (error) {
@@ -36,7 +36,6 @@ export default () => {
       const wallet = await WalletService.getWallets(userId);
       return res.status(200).json({ err: false, result: wallet });
     } catch (error) {
-      console.log("error", error);
       logger.error(
         `[wallet/getAll/${JSON.stringify(req.body)}] - ${error.message}`
       );
@@ -51,10 +50,9 @@ export default () => {
         req.params.walletId
       );
 
-      const wallet = await WalletService.deleteWallet(walletId);
+      await WalletService.deleteWallet(walletId);
       return res.status(200).json({ err: false });
     } catch (error) {
-      console.log("error", error);
       logger.error(
         `[wallet/delete/${JSON.stringify(req.body)}] - ${error.message}`
       );
@@ -62,5 +60,21 @@ export default () => {
     }
   });
 
+  router.patch("/:walletId", async (req: Request, res: Response) => {
+    try {
+      const walletId = await generalSchemas.idSchema.validateAsync(
+        req.params.walletId
+      );
+      const name = await generalSchemas.textSchema.validateAsync(req.body.name);
+
+      const wallet = await WalletService.update(walletId, name);
+      return res.status(200).json({ err: false, result: wallet });
+    } catch (error) {
+      logger.error(
+        `[wallet/delete/${JSON.stringify(req.body)}] - ${error.message}`
+      );
+      return customErrorResponse(res, error);
+    }
+  });
   return router;
 };

@@ -1,3 +1,4 @@
+import { WalletNotFound } from "../../interfaces/error/CustomsErrors";
 import { Wallet } from "../../storage/typeORM/entity/Wallet";
 import * as walletActions from "./actions";
 
@@ -14,6 +15,15 @@ class WalletService {
 
   public async deleteWallet(walletId: number): Promise<void> {
     await walletActions.deleteWallet(walletId);
+  }
+
+  public async update(walletId: number, name: string): Promise<Wallet> {
+    const wallet = await walletActions.getOneWallet(walletId);
+
+    if (!wallet) throw new WalletNotFound();
+
+    const walletUpdated = await walletActions.updateWallet(wallet, name);
+    return walletUpdated;
   }
 }
 
