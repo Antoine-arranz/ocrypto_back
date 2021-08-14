@@ -6,9 +6,12 @@ import {
   UpdateDateColumn,
   CreateDateColumn,
   OneToMany,
+  ManyToOne,
+  JoinColumn,
 } from "typeorm";
 import { Platform } from "../Platform";
 import { Currency } from "../Currency";
+import { Wallet } from "../Wallet";
 
 @Entity("Events")
 export default class Event extends BaseEntity {
@@ -21,11 +24,11 @@ export default class Event extends BaseEntity {
   @Column()
   date: Date;
 
-  @Column()
-  quantity: number;
+  @Column("float")
+  quantityBougth: number;
 
-  @Column()
-  unit_price: number;
+  @Column("float", { nullable: true })
+  quantitySell: number;
 
   @Column("float", { nullable: true })
   fees: number;
@@ -36,8 +39,19 @@ export default class Event extends BaseEntity {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @OneToMany(() => Platform, (Platform) => Platform.Events)
-  Platforms: Platform[];
+  @Column()
+  Platform_Id: number;
+
+  @Column()
+  Wallet_Id: number;
+
+  @ManyToOne(() => Platform, (Platform) => Platform.Event)
+  @JoinColumn({ name: "Platform_Id" })
+  Platform: Platform;
+
+  @ManyToOne(() => Wallet, (Wallet) => Wallet.Event)
+  @JoinColumn({ name: "Wallet_Id" })
+  Wallet: Wallet;
 
   @OneToMany(() => Currency, (Currency) => Currency.Events)
   Currencies: Platform[];

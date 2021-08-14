@@ -20,3 +20,11 @@ export interface TokenI {
 export interface WalletI {
   name: string;
 }
+
+export interface EventI {
+  type: "buy" | "sell";
+  date: Date;
+  quantity: number;
+  unit_price: number;
+  fees: number;
+}

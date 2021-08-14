@@ -3,8 +3,6 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   BaseEntity,
-  UpdateDateColumn,
-  CreateDateColumn,
   OneToMany,
 } from "typeorm";
 import { Event } from "../Event";
@@ -19,6 +17,9 @@ export default class Platform extends BaseEntity {
 
   @Column()
   slug: string;
-  @OneToMany(() => Event, (Event) => Event.Platforms)
-  Events: Event[];
+  @OneToMany(() => Event, (Event) => Event.Platform, {
+    onUpdate: "CASCADE",
+    onDelete: "RESTRICT",
+  })
+  Event: Event[];
 }

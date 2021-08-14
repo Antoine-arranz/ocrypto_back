@@ -7,8 +7,10 @@ import {
   CreateDateColumn,
   ManyToOne,
   JoinColumn,
+  OneToMany,
 } from "typeorm";
 import { User } from "../User";
+import { Event } from "../Event";
 
 @Entity("Wallets")
 export default class Wallet extends BaseEntity {
@@ -29,4 +31,10 @@ export default class Wallet extends BaseEntity {
   @ManyToOne(() => User, (User) => User.Wallets)
   @JoinColumn({ name: "User_Id" })
   User: User;
+
+  @OneToMany(() => Event, (Event) => Event.Wallet, {
+    onUpdate: "CASCADE",
+    onDelete: "RESTRICT",
+  })
+  Event: Event[];
 }
