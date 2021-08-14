@@ -17,6 +17,8 @@ export default class Platform extends BaseEntity {
   @Column()
   name: string;
 
+  @Column()
+  slug: string;
   @OneToMany(() => Event, (Event) => Event.Platforms)
   Events: Event[];
 }

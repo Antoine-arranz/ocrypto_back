@@ -17,8 +17,8 @@ export default class Currency extends BaseEntity {
   @Column()
   name: string;
 
-  @Column("float")
-  amount: Date;
+  @Column()
+  slug: string;
 
   @OneToMany(() => Event, (Event) => Event.Currencies)
   Events: Event[];

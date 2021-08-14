@@ -28,7 +28,6 @@ export default () => {
 
   router.get("/:userId", async (req: Request, res: Response) => {
     try {
-      console.log("getAll");
       const userId = await generalSchemas.idSchema.validateAsync(
         req.params.userId
       );
