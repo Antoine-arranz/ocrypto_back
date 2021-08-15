@@ -8,6 +8,10 @@ class EventService {
     eventType: string,
     eventDate: Date,
     quantityBougth: number,
+    amountSell: number,
+    amountBought: number,
+    currencyBougth_Id: number,
+    currencySell_Id: number,
     quantitySell?: number,
     fees?: number
   ): Promise<void> {
@@ -17,6 +21,10 @@ class EventService {
       eventType,
       eventDate,
       quantityBougth,
+      amountSell,
+      amountBought,
+      currencyBougth_Id,
+      currencySell_Id,
       quantitySell,
       fees
     );

@@ -29,12 +29,30 @@ export default () => {
       const fees =
         req.body.fees && (await eventSchemas.fees.validateAsync(req.body.fees));
 
+      const currencyBougth_Id = await generalSchemas.idSchema.validateAsync(
+        req.body.currencyBougth
+      );
+      const currencySell_Id = await generalSchemas.idSchema.validateAsync(
+        req.body.currencySell
+      );
+
+      const amountBought = await generalSchemas.idSchema.validateAsync(
+        req.body.amountBought
+      );
+      const amountSell = await generalSchemas.idSchema.validateAsync(
+        req.body.amountSell
+      );
+
       await EventService.insert(
         walletId,
         platformId,
         eventType,
         eventDate,
         quantityBought,
+        amountSell,
+        amountBought,
+        currencyBougth_Id,
+        currencySell_Id,
         quantitySell,
         fees
       );

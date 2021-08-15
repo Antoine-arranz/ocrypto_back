@@ -5,9 +5,10 @@ import {
   BaseEntity,
   UpdateDateColumn,
   CreateDateColumn,
-  OneToMany,
   ManyToOne,
   JoinColumn,
+  OneToMany,
+  OneToOne,
 } from "typeorm";
 import { Platform } from "../Platform";
 import { Currency } from "../Currency";
@@ -29,6 +30,10 @@ export default class Event extends BaseEntity {
 
   @Column("float", { nullable: true })
   quantitySell: number;
+  @Column("float", { nullable: true })
+  amountBought: number;
+  @Column("float", { nullable: true })
+  amountSell: number;
 
   @Column("float", { nullable: true })
   fees: number;
@@ -38,6 +43,12 @@ export default class Event extends BaseEntity {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @Column()
+  CurrencyBought_Id: number;
+
+  @Column()
+  CurrencySell_Id: number;
 
   @Column()
   Platform_Id: number;
@@ -53,6 +64,15 @@ export default class Event extends BaseEntity {
   @JoinColumn({ name: "Wallet_Id" })
   Wallet: Wallet;
 
-  @OneToMany(() => Currency, (Currency) => Currency.Events)
-  Currencies: Platform[];
+  @ManyToOne(() => Currency, (Currency) => Currency.Events, {
+    primary: true,
+    onUpdate: "CASCADE",
+    onDelete: "SET NULL",
+  })
+  @JoinColumn([{ name: "CurrencyBought_Id" }])
+  Currency: Currency;
+
+  //@ManyToOne(() => Currency, (Currency) => Currency.CurrencySell)
+  //@JoinColumn({ name: "CurrencySell_Id" })
+  //CurrencySell: Currency;
 }

@@ -3,8 +3,8 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   BaseEntity,
-  UpdateDateColumn,
-  CreateDateColumn,
+  ManyToOne,
+  JoinColumn,
   OneToMany,
 } from "typeorm";
 import { Event } from "../Event";
@@ -20,6 +20,6 @@ export default class Currency extends BaseEntity {
   @Column()
   slug: string;
 
-  @OneToMany(() => Event, (Event) => Event.Currencies)
+  @OneToMany(() => Event, (Event) => Event.Currency)
   Events: Event[];
 }

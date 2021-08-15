@@ -11,7 +11,6 @@ export default () => {
 
   router.post("/:userId/new", async (req: Request, res: Response) => {
     try {
-      console.log("addOne");
       const userId = await generalSchemas.idSchema.validateAsync(
         req.params.userId
       );
@@ -44,7 +43,6 @@ export default () => {
 
   router.delete("/:walletId", async (req: Request, res: Response) => {
     try {
-      console.log("delete");
       const walletId = await generalSchemas.idSchema.validateAsync(
         req.params.walletId
       );
