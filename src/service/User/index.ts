@@ -3,7 +3,7 @@ import {
   AccountNotValidatedError,
   UserNotExist,
 } from "../../interfaces/error/CustomsErrors";
-import { UserCreateI, UserLoginI } from "../../interfaces/object";
+import { UserCreateI, UserLoginI, UserUpdateI } from "../../interfaces/object";
 import * as userActions from "./actions";
 import bcrypt from "bcrypt";
 import { User } from "../../storage/typeORM/entity/User";
@@ -63,10 +63,16 @@ class UserService {
     decryptToken: { userId: number; exp: number },
     password: string,
     token: string
-  ) {
+  ): Promise<void> {
     const user = await userActions.findOneById(decryptToken.userId);
     user && (await userActions.updatePassword(user, password));
     revokeToken(token);
+  }
+
+  public async update(userId: number, data: UserUpdateI): Promise<User | void> {
+    const user = await userActions.update(userId, data);
+
+    return user;
   }
 }
 

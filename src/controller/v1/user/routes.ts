@@ -113,6 +113,23 @@ export default () => {
     }
   );
 
+  router.patch("/:userId", async (req: any, res: Response) => {
+    try {
+      const userId = await generalSchemas.idSchema.validateAsync(
+        req.params.userId
+      );
+      const data = await userSchemas.updateUserSchema.validateAsync(req.body);
+
+      const user = await UserService.update(userId, data);
+      return res.status(200).json({ err: false, result: user });
+    } catch (error) {
+      logger.error(
+        `[user/update/${JSON.stringify(req.params)}] - ${error.message}`
+      );
+      return customErrorResponse(res, error);
+    }
+  });
+
   router.use(privateRoute);
 
   router.get("/test", async (req: Request, res: Response) => {

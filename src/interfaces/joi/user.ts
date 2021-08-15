@@ -17,3 +17,9 @@ export const loginSchema = Joi.object().keys({
   email: email.required(),
   password: passwordSchema,
 });
+
+export const updateUserSchema = Joi.object().keys({
+  email,
+  lastName: name,
+  firstName: name,
+});

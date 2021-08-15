@@ -28,3 +28,10 @@ export interface EventI {
   unit_price: number;
   fees: number;
 }
+
+export interface UserUpdateI {
+  email: string;
+  lastName: string;
+  firstName: string;
+  country: string;
+}
