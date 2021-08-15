@@ -82,5 +82,20 @@ export default () => {
     }
   });
 
+  router.get("/quantity/:walletId", async (req: Request, res: Response) => {
+    try {
+      const walletId = await generalSchemas.idSchema.validateAsync(
+        req.params.walletId
+      );
+      const quantityTotal = await EventService.getQuantityTotal(walletId);
+      return res.status(200).json({ err: false, result: quantityTotal });
+    } catch (error) {
+      logger.error(
+        `[event/get/${JSON.stringify(req.body)}] - ${error.message}`
+      );
+      return customErrorResponse(res, error);
+    }
+  });
+
   return router;
 };

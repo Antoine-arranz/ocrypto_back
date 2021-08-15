@@ -35,6 +35,12 @@ class EventService {
 
     return events;
   }
+
+  public async getQuantityTotal(walletId: number): Promise<Array<any>> {
+    const events = await eventActions.getQuantity(walletId);
+
+    return events;
+  }
 }
 
 export default EventService;
