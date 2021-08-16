@@ -20,40 +20,34 @@ export default () => {
       const eventType = await eventSchemas.type.validateAsync(req.body.type);
       const eventDate = await eventSchemas.date.validateAsync(req.body.date);
 
-      const quantityBought = await eventSchemas.quantity.validateAsync(
-        req.body.quantityBought
+      const quantity = await eventSchemas.quantity.validateAsync(
+        req.body.quantity
       );
-      const quantitySell =
-        req.body.quantitySell &&
-        (await eventSchemas.quantity.validateAsync(req.body.quantitySell));
+
       const fees =
         req.body.fees && (await eventSchemas.fees.validateAsync(req.body.fees));
 
-      const currencyBougth_Id = await generalSchemas.idSchema.validateAsync(
-        req.body.currencyBougth
+      const CurrencyAsset = await generalSchemas.idSchema.validateAsync(
+        req.body.CurrencyAsset
       );
-      const currencySell_Id = await generalSchemas.idSchema.validateAsync(
-        req.body.currencySell
+      const CurrencyCounterparty = await generalSchemas.idSchema.validateAsync(
+        req.body.CurrencyCounterparty
       );
 
-      const amountBought = await generalSchemas.idSchema.validateAsync(
-        req.body.amountBought
+      const amount = await generalSchemas.idSchema.validateAsync(
+        req.body.amount
       );
-      const amountSell = await generalSchemas.idSchema.validateAsync(
-        req.body.amountSell
-      );
+   
 
       await EventService.insert(
         walletId,
         platformId,
         eventType,
         eventDate,
-        quantityBought,
-        amountSell,
-        amountBought,
-        currencyBougth_Id,
-        currencySell_Id,
-        quantitySell,
+        quantity,
+        amount,
+        CurrencyAsset,
+        CurrencyCounterparty,
         fees
       );
 

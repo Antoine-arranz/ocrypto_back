@@ -18,8 +18,14 @@ export default class Currency extends BaseEntity {
   name: string;
 
   @Column()
-  slug: string;
+  image: string;
 
-  @OneToMany(() => Event, (Event) => Event.Currency)
+  @Column()
+  symbol: string;
+
+  @OneToMany(() => Event, event => event.CurrencyAsset)
   Events: Event[];
+ 
+  @OneToMany(() => Event, event => event.CurrencyCounterparty)
+  EventsA: Event[];
 }

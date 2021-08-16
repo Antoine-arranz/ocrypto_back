@@ -4,12 +4,10 @@ const addEvent = async (
   platformId: number,
   eventType: string,
   eventDate: Date,
-  quantityBougth: number,
-  amountSell: number,
-  amountBought: number,
-  currencyBougth_Id: number,
-  currencySell_Id: number,
-  quantitySell?: number,
+  quantity: number,
+  amount:number,
+  CurrencyAsset: number,
+  CurrencyCounterparty: number,
   fees?: number
 ) => {
   await insert(
@@ -17,13 +15,11 @@ const addEvent = async (
     platformId,
     eventType,
     eventDate,
-    quantityBougth,
-    amountSell,
-    amountBought,
-    currencyBougth_Id,
-    currencySell_Id,
-    quantitySell,
-    fees
+    quantity,
+    amount,
+    CurrencyAsset,
+    CurrencyCounterparty,
+    fees 
   );
 };
 

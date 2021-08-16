@@ -6,26 +6,22 @@ const insertPlatforms = async (
   platformId: number,
   eventType: string,
   eventDate: Date,
-  quantityBougth: number,
-  amountSell: number,
-  amountBought: number,
-  currencyBougth_Id: number,
-  currencySell_Id: number,
-  quantitySell?: number,
+  quantity: number,
+  amount:number,
+  CurrencyAsset: number,
+  CurrencyCounterparty: number,
   fees?: number
 ): Promise<Event> => {
   const event = await Event.create({
     type: eventType,
     date: eventDate,
-    quantityBougth: quantityBougth,
-    ...(quantitySell && { quantitySell }),
-    ...(fees && { fees }),
+    quantity,
     Wallet_Id: walletId,
     Platform_Id: platformId,
-    CurrencyBought_Id: currencyBougth_Id,
-    CurrencySell_Id: currencySell_Id,
-    amountSell,
-    amountBought,
+    CurrencyAsset_Id : CurrencyAsset,
+    CurrencyCounterparty_Id : CurrencyCounterparty,
+    amount,
+    ...(fees && { fees }),
   }).save();
 
   return event;

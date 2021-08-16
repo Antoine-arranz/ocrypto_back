@@ -26,14 +26,13 @@ export default class Event extends BaseEntity {
   date: Date;
 
   @Column("float")
-  quantityBougth: number;
+  quantity: number;
 
   @Column("float", { nullable: true })
-  quantitySell: number;
+  amount: number;
+
   @Column("float", { nullable: true })
-  amountBought: number;
-  @Column("float", { nullable: true })
-  amountSell: number;
+  usd_amount: number;
 
   @Column("float", { nullable: true })
   fees: number;
@@ -45,10 +44,10 @@ export default class Event extends BaseEntity {
   updatedAt: Date;
 
   @Column()
-  CurrencyBought_Id: number;
+  CurrencyAsset_Id:number;
 
   @Column()
-  CurrencySell_Id: number;
+  CurrencyCounterparty_Id:number;
 
   @Column()
   Platform_Id: number;
@@ -64,15 +63,13 @@ export default class Event extends BaseEntity {
   @JoinColumn({ name: "Wallet_Id" })
   Wallet: Wallet;
 
-  @ManyToOne(() => Currency, (Currency) => Currency.Events, {
-    primary: true,
-    onUpdate: "CASCADE",
-    onDelete: "SET NULL",
-  })
-  @JoinColumn([{ name: "CurrencyBought_Id" }])
-  Currency: Currency;
 
-  //@ManyToOne(() => Currency, (Currency) => Currency.CurrencySell)
-  //@JoinColumn({ name: "CurrencySell_Id" })
-  //CurrencySell: Currency;
+  @ManyToOne(() => Currency, CurrencyBought_Id => CurrencyBought_Id.Events )
+  @JoinColumn([{ name: "CurrencyAsset_Id" }])
+  CurrencyAsset: Currency;
+
+
+  @ManyToOne(() => Currency, CurrencySell_Id => CurrencySell_Id.Events )
+  @JoinColumn([{ name: "CurrencyCounterparty_Id" }])
+  CurrencyCounterparty: Currency;
 }

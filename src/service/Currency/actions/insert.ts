@@ -13,7 +13,9 @@ const insert = async (): Promise<void> => {
   const formatedData = await test.data.map((currency) => {
     return {
       name: currency.name,
-      slug: currency.image,
+      symbol : currency.symbol,
+      image: currency.image,
+   
     };
   });
 

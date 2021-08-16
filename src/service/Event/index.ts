@@ -7,12 +7,10 @@ class EventService {
     platformId: number,
     eventType: string,
     eventDate: Date,
-    quantityBougth: number,
-    amountSell: number,
-    amountBought: number,
-    currencyBougth_Id: number,
-    currencySell_Id: number,
-    quantitySell?: number,
+    quantity: number,
+    amount:number,
+    CurrencyAsset: number,
+    CurrencyCounterparty: number,
     fees?: number
   ): Promise<void> {
     await eventActions.insert(
@@ -20,12 +18,10 @@ class EventService {
       platformId,
       eventType,
       eventDate,
-      quantityBougth,
-      amountSell,
-      amountBought,
-      currencyBougth_Id,
-      currencySell_Id,
-      quantitySell,
+      quantity,
+      amount,
+      CurrencyAsset,
+      CurrencyCounterparty,
       fees
     );
   }
