@@ -12,3 +12,5 @@ export const text = Joi.string();
 export const booleanSchema = Joi.boolean().required();
 
 export const textSchema = Joi.string().required();
+
+export const uuidSchema = Joi.string().trim().required();

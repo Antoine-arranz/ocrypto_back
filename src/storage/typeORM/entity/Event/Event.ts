@@ -44,10 +44,10 @@ export default class Event extends BaseEntity {
   updatedAt: Date;
 
   @Column()
-  CurrencyAsset_Id:number;
+  CurrencyAsset_Id: string;
 
   @Column()
-  CurrencyCounterparty_Id:number;
+  CurrencyCounterparty_Id: string;
 
   @Column()
   Platform_Id: number;
@@ -63,13 +63,14 @@ export default class Event extends BaseEntity {
   @JoinColumn({ name: "Wallet_Id" })
   Wallet: Wallet;
 
-
-  @ManyToOne(() => Currency, CurrencyBought_Id => CurrencyBought_Id.Events )
-  @JoinColumn([{ name: "CurrencyAsset_Id" }])
+  @ManyToOne(() => Currency, (CurrencyAsset_Id) => CurrencyAsset_Id.Events)
+  @JoinColumn({ name: "CurrencyAsset_Id" })
   CurrencyAsset: Currency;
 
-
-  @ManyToOne(() => Currency, CurrencySell_Id => CurrencySell_Id.Events )
-  @JoinColumn([{ name: "CurrencyCounterparty_Id" }])
+  @ManyToOne(
+    () => Currency,
+    (CurrencyCounterparty_Id) => CurrencyCounterparty_Id.Events
+  )
+  @JoinColumn({ name: "CurrencyCounterparty_Id" })
   CurrencyCounterparty: Currency;
 }

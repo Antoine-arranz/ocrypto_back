@@ -8,9 +8,9 @@ class EventService {
     eventType: string,
     eventDate: Date,
     quantity: number,
-    amount:number,
-    CurrencyAsset: number,
-    CurrencyCounterparty: number,
+    amount: number,
+    CurrencyAsset: string,
+    CurrencyCounterparty: string,
     fees?: number
   ): Promise<void> {
     await eventActions.insert(

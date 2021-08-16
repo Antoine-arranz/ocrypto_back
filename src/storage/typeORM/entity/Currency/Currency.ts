@@ -6,13 +6,14 @@ import {
   ManyToOne,
   JoinColumn,
   OneToMany,
+  PrimaryColumn,
 } from "typeorm";
 import { Event } from "../Event";
 
 @Entity("Currencies")
 export default class Currency extends BaseEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryColumn()
+  apiId: string;
 
   @Column()
   name: string;
@@ -23,9 +24,9 @@ export default class Currency extends BaseEntity {
   @Column()
   symbol: string;
 
-  @OneToMany(() => Event, event => event.CurrencyAsset)
+  @OneToMany(() => Event, (event) => event.CurrencyAsset)
   Events: Event[];
- 
-  @OneToMany(() => Event, event => event.CurrencyCounterparty)
+
+  @OneToMany(() => Event, (event) => event.CurrencyCounterparty)
   EventsA: Event[];
 }

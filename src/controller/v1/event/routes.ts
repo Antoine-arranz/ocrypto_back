@@ -27,17 +27,17 @@ export default () => {
       const fees =
         req.body.fees && (await eventSchemas.fees.validateAsync(req.body.fees));
 
-      const CurrencyAsset = await generalSchemas.idSchema.validateAsync(
+      const CurrencyAsset = await generalSchemas.uuidSchema.validateAsync(
         req.body.CurrencyAsset
       );
-      const CurrencyCounterparty = await generalSchemas.idSchema.validateAsync(
-        req.body.CurrencyCounterparty
-      );
+      const CurrencyCounterparty =
+        await generalSchemas.uuidSchema.validateAsync(
+          req.body.CurrencyCounterparty
+        );
 
       const amount = await generalSchemas.idSchema.validateAsync(
         req.body.amount
       );
-   
 
       await EventService.insert(
         walletId,
