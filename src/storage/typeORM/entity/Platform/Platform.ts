@@ -16,7 +16,7 @@ export default class Platform extends BaseEntity {
   name: string;
 
   @Column()
-  slug: string;
+  image: string;
 
   @OneToMany(() => Event, (Event) => Event.Platform, {
     onUpdate: "CASCADE",

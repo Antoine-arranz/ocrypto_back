@@ -12,7 +12,7 @@ const insert = async (): Promise<void> => {
   const formatedData = await test.data.map((platform) => {
     return {
       name: platform.name,
-      slug: platform.image,
+      image: platform.image,
     };
   });
 
