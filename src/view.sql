@@ -34,10 +34,30 @@ FROM quantity_buy
 LEFT JOIN quantity_sell ON quantity_sell."Wallet_Id" = quantity_buy."Wallet_Id"
 AND quantity_sell."CurrencyAsset_Id" = quantity_buy."CurrencyAsset_Id";
 
-
-
-
-
   
   CREATE OR REPLACE VIEW "quantity_total_asset" AS
 SELECT * FROM quantity_total LEFT JOIN "Currencies" ON "Currencies"."apiId"=quantity_total."CurrencyAsset_Id"
+
+
+
+
+
+
+
+
+
+
+CREATE OR REPLACE VIEW ref_amount_positive_negative AS
+SELECT 
+    e.type, 
+    date(e.date), 
+    e.id, 
+    e."Wallet_Id",
+    e."CurrencyAsset_Id",
+    e.quantity,
+        CASE
+            WHEN e.type='SELL' THEN -e.usd_amount
+            ELSE e.usd_amount
+    END AS usd_amount
+       
+FROM "Events" AS e

@@ -9,6 +9,7 @@ import {
   PrimaryColumn,
 } from "typeorm";
 import { Event } from "../Event";
+import { WalletHasCurrency } from "../WalletHasCurrency";
 
 @Entity("Currencies")
 export default class Currency extends BaseEntity {
@@ -29,4 +30,7 @@ export default class Currency extends BaseEntity {
 
   @OneToMany(() => Event, (event) => event.CurrencyCounterparty)
   EventsA: Event[];
+
+  @OneToMany(() => WalletHasCurrency, (WalletHasCurrency) => WalletHasCurrency.Currency)
+  WalletHasCurrencies: WalletHasCurrency[];
 }

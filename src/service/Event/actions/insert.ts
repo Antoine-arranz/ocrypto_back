@@ -1,5 +1,7 @@
 import axios from "axios";
-import { insert } from "../../../storage/typeORM/entity/Event/Repositories";
+import { insertEvent, findLastState } from "../../../storage/typeORM/entity/Event/Repositories";
+import {insertCurrencyWallet} from '../../../storage/typeORM/entity/WalletHasCurrency/Repositories'
+
 const addEvent = async (
   walletId: number,
   platformId: number,
@@ -28,9 +30,15 @@ const addEvent = async (
     });
 
     usd_amount = currency.data.market_data.current_price.usd * amount;
-    console.log(usd_amount);
   }
 
+const currencylastState = await findLastState(walletId,CurrencyAsset)
+
+let currencynewState = quantity
+if(currencylastState >=0){
+  currencynewState =  eventType === 'buy' ? currencylastState + quantity : currencylastState - quantity
+
+}
   let eventAdded: any = [
     {
       Wallet_Id: walletId,
@@ -43,28 +51,35 @@ const addEvent = async (
       CurrencyCounterparty_Id: CurrencyCounterparty,
       usd_amount,
       fees,
+      lastState : currencynewState
     },
   ];
 
-  console.log("eventAdded1", eventAdded);
+  if(CurrencyCounterparty !== "usd"){
+    const counterPartLastState = await findLastState(walletId,CurrencyCounterparty)
+    let countPartnewState = amount
+      if(counterPartLastState >=0){
+        countPartnewState =  eventType === 'buy' ? counterPartLastState + amount : counterPartLastState - amount
 
-  if (eventType === "sell" && CurrencyCounterparty !== "usd") {
-    eventAdded.push({
-      Wallet_Id: walletId,
-      Platform_Id: platformId,
-      type: "buy",
-      date: eventDate,
-      quantity: amount,
-      amount: quantity,
-      CurrencyAsset_Id: CurrencyCounterparty,
-      CurrencyCounterparty_Id: CurrencyAsset,
-      usd_amount,
-      fees,
-    });
+      }
+      eventAdded.push({
+        Wallet_Id: walletId,
+        Platform_Id: platformId,
+        type: eventType === 'sell' ? 'buy' : 'sell',
+        date: eventDate,
+        quantity: amount,
+        amount: quantity,
+        CurrencyAsset_Id: CurrencyCounterparty,
+        CurrencyCounterparty_Id: CurrencyAsset,
+        usd_amount,
+        fees,
+        show : false,
+        lastState : countPartnewState
+      }); 
+  
   }
-
-  console.log("eventAdded2", eventAdded);
-  await insert(eventAdded);
+  await insertEvent(eventAdded);
+  await insertCurrencyWallet(eventAdded)
 };
 
 export default addEvent;

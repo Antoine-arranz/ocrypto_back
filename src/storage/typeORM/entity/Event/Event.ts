@@ -43,6 +43,12 @@ export default class Event extends BaseEntity {
   @UpdateDateColumn()
   updatedAt: Date;
 
+  @Column({default : true})
+  show : boolean
+
+  @Column()
+  lastState:number;
+
   @Column()
   CurrencyAsset_Id: string;
 

@@ -4,6 +4,7 @@ import { routes as wallet } from "./wallet";
 import { routes as platform } from "./platform";
 import { routes as currency } from "./currency";
 import { routes as event } from "./event";
+import { routes as chart } from "./chart";
 
 export default () => {
   const router = express.Router();
@@ -12,5 +13,6 @@ export default () => {
   router.use("/platform", platform());
   router.use("/currency", currency());
   router.use("/event", event());
+  router.use('/chart',chart())
   return router;
 };

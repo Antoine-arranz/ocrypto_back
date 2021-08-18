@@ -8,7 +8,6 @@ const getAllEvents = async (walletId: number): Promise<Array<any>> => {
     .leftJoinAndSelect("Event.Platform", "Platform")
     .where("Event.Wallet_Id = :walletId", { walletId })
     .getMany();
-
   return events;
 };
 
