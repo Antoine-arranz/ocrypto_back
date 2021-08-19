@@ -30,7 +30,6 @@ const [currencyAsset,CurrencyCounterparty] = data
         Currency_Id:CurrencyCounterparty.CurrencyAsset_Id,
         currencyTotal : CurrencyCounterparty.quantity
       }).save()
-    
     }
   }
  }

@@ -9,10 +9,10 @@ export default () => {
 
   router.get("/:walletId", async (req: Request, res: Response) => {
     try {
-
+console.log('ici')
       const chart = CharServuce.getChart(req.params.walletId)
 
-      return res.status(200).json({ err: false });
+      return res.status(200).json({ err: false, result:chart });
     } catch (error) {
       logger.error(
         `[currencies/get/${JSON.stringify(req.body)}] - ${error.message}`
