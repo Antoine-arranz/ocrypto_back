@@ -8,7 +8,7 @@ export default class WalletHasCurrency extends BaseEntity {
   Wallet_Id: number;
 
   @Column({ primary: true })
-  Currency_Id: number;
+  Currency_Id: string;
 
   @Column()
   currencyTotal: number;

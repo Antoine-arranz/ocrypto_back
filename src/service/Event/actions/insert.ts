@@ -1,6 +1,10 @@
 import axios from "axios";
-import { insertEvent, findLastState } from "../../../storage/typeORM/entity/Event/Repositories";
-import {insertCurrencyWallet} from '../../../storage/typeORM/entity/WalletHasCurrency/Repositories'
+import {
+  insertEvent,
+  findLastState,
+  getLastUsdAmount,
+} from "../../../storage/typeORM/entity/Event/Repositories";
+import { insertCurrencyWallet } from "../../../storage/typeORM/entity/WalletHasCurrency/Repositories";
 
 const addEvent = async (
   walletId: number,
@@ -13,8 +17,41 @@ const addEvent = async (
   CurrencyCounterparty: string,
   fees?: number
 ) => {
-  let usd_amount = amount;
+  let usdAmount = amount;
+  let currencyAssetNewState = quantity;
+  let currencyAssetNewCounterParty = amount;
+  console.log("currencyAssetNewState", currencyAssetNewState);
+  console.log("currencyAssetNewCounterParty", currencyAssetNewCounterParty);
+  const currencyAssetLastState = await findLastState(walletId, CurrencyAsset);
+  console.log("currencyAssetLastState", currencyAssetLastState);
+  const currencyCounterPartyLastState = await findLastState(
+    walletId,
+    CurrencyCounterparty
+  );
+  console.log("currencyCounterPartyLastState", currencyCounterPartyLastState);
+  if (currencyAssetLastState >= 0) {
+    console.log("quantity", quantity);
+    currencyAssetNewState =
+      eventType === "buy"
+        ? currencyAssetLastState + quantity
+        : currencyAssetLastState - quantity;
+    console.log("currencynewState", currencyAssetNewState);
+  }
 
+  if (CurrencyCounterparty !== "usd") {
+    let countPartnewState = amount;
+    if (currencyCounterPartyLastState >= 0) {
+      countPartnewState =
+        eventType === "buy"
+          ? currencyCounterPartyLastState + amount
+          : currencyCounterPartyLastState - amount;
+      console.log("countPartnewState", countPartnewState);
+    }
+  }
+  const lastEvent = await getLastUsdAmount(walletId);
+  console.log("lastEvent", lastEvent);
+  const lastUsdAmount = lastEvent ? lastEvent.Event_lastUsdAmount : amount;
+  console.log("lastUsdAmount", lastUsdAmount);
   if (CurrencyCounterparty !== "usd") {
     const dateFormated = new Date(eventDate)
       .toLocaleDateString("fr", {
@@ -24,21 +61,37 @@ const addEvent = async (
       })
       .split("/")
       .join("-");
-    const currency = await axios.request({
+    const currencyCounterparty = await axios.request({
       url: `https://api.coingecko.com/api/v3/coins/${CurrencyCounterparty}/history?date=${dateFormated}`,
       method: "GET",
     });
 
-    usd_amount = currency.data.market_data.current_price.usd * amount;
+    const currencyAsset = await axios.request({
+      url: `https://api.coingecko.com/api/v3/coins/${CurrencyAsset}/history?date=${dateFormated}`,
+      method: "GET",
+    });
+    console.log(
+      " currencyCounterparty.data.market_data.current_price.usd",
+      currencyCounterparty.data.market_data.current_price.usd
+    );
+
+    console.log(
+      " currencyAsset.data.market_data.current_price.usd",
+      currencyAsset.data.market_data.current_price.usd
+    );
+
+    console.log("amount", amount);
+
+    console.log("currencynewState", currencyCounterPartyLastState);
+    usdAmount =
+      lastUsdAmount -
+      currencyCounterparty.data.market_data.current_price.usd *
+        currencyAssetNewCounterParty +
+      currencyAsset.data.market_data.current_price.usd * currencyAssetNewState;
+
+    console.log("usdCounterParty", usdAmount);
   }
 
-const currencylastState = await findLastState(walletId,CurrencyAsset)
-
-let currencynewState = quantity
-if(currencylastState >=0){
-  currencynewState =  eventType === 'buy' ? currencylastState + quantity : currencylastState - quantity
-
-}
   let eventAdded: any = [
     {
       Wallet_Id: walletId,
@@ -49,37 +102,42 @@ if(currencylastState >=0){
       amount,
       CurrencyAsset_Id: CurrencyAsset,
       CurrencyCounterparty_Id: CurrencyCounterparty,
-      usd_amount,
       fees,
-      lastState : currencynewState
+      lastState: currencyAssetNewState,
+      currencyAssetNewState,
+      lastUsdAmount: usdAmount,
     },
   ];
 
-  if(CurrencyCounterparty !== "usd"){
-    const counterPartLastState = await findLastState(walletId,CurrencyCounterparty)
-    let countPartnewState = amount
-      if(counterPartLastState >=0){
-        countPartnewState =  eventType === 'buy' ? counterPartLastState + amount : counterPartLastState - amount
-
-      }
-      eventAdded.push({
-        Wallet_Id: walletId,
-        Platform_Id: platformId,
-        type: eventType === 'sell' ? 'buy' : 'sell',
-        date: eventDate,
-        quantity: amount,
-        amount: quantity,
-        CurrencyAsset_Id: CurrencyCounterparty,
-        CurrencyCounterparty_Id: CurrencyAsset,
-        usd_amount,
-        fees,
-        show : false,
-        lastState : countPartnewState
-      }); 
-  
+  if (CurrencyCounterparty !== "usd") {
+    const counterPartLastState = await findLastState(
+      walletId,
+      CurrencyCounterparty
+    );
+    let countPartnewState = amount;
+    if (counterPartLastState >= 0) {
+      countPartnewState =
+        eventType === "buy"
+          ? counterPartLastState + amount
+          : counterPartLastState - amount;
+    }
+    eventAdded.push({
+      Wallet_Id: walletId,
+      Platform_Id: platformId,
+      type: eventType === "sell" ? "buy" : "sell",
+      date: eventDate,
+      quantity: amount,
+      amount: quantity,
+      CurrencyAsset_Id: CurrencyCounterparty,
+      CurrencyCounterparty_Id: CurrencyAsset,
+      fees,
+      show: false,
+      lastState: countPartnewState,
+      lastUsdAmount: usdAmount,
+    });
   }
   await insertEvent(eventAdded);
-  await insertCurrencyWallet(eventAdded)
+  await insertCurrencyWallet(eventAdded);
 };
 
 export default addEvent;

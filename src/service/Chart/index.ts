@@ -1,4 +1,4 @@
-import { getMinDate } from "../../storage/typeORM/entity/Event/Repositories";
+import { getFirstEvent } from "../../storage/typeORM/entity/Event/Repositories";
 import { getManager } from "typeorm";
 import { getQuantity } from "../Event/actions";
 import getAllEvents from "../Event/actions/getAll";
@@ -17,7 +17,7 @@ class ChartService {
       );
     };
 
-    function getArrayOfTimestamp(startDate, stopDate) {
+    function getArrayOfTimestamp(startDate, stopDate): Array<Date> {
       const currentDate = new Date(startDate);
       let timestamp: any = [];
       while (currentDate < stopDate) {
@@ -28,7 +28,6 @@ class ChartService {
     }
 
     const events = await getAllEvents(walletId);
-    console.log("events", events);
     if (events.length === 0) {
       return;
     }
@@ -40,10 +39,10 @@ class ChartService {
       };
     });
 
-    const startDate = await getMinDate(walletId);
+    const firstEvent = await getFirstEvent(walletId);
 
     const timestamps =
-      startDate.date && getArrayOfTimestamp(startDate.date, new Date());
+      firstEvent.date && getArrayOfTimestamp(firstEvent.date, new Date());
     const zizi: any = [];
     const currencies: any = [];
     await Promise.all(
@@ -51,32 +50,39 @@ class ChartService {
         const resultPrice: any = [];
         const startAt = await findFirstEventByAsset(walletId, currency.name);
         const timestampsChart = getArrayOfTimestamp(startAt.min, new Date());
-        const test = dateDiff(startAt.min, new Date());
+        const dayDiff = dateDiff(startAt.min, new Date());
 
-        const url = `https://api.coingecko.com/api/v3/coins/${
-          currency.name
-        }/market_chart?vs_currency=usd&days=${test + 1}&interval=daily`;
+        const url = `https://api.coingecko.com/api/v3/coins/${currency.name}/market_chart?vs_currency=usd&days=${dayDiff}&interval=daily`;
         const result = await axios.request({ url, method: "GET" });
         zizi.push({
-          timestampsChart: timestampsChart,
+          timestampsChart,
           price: timestampsChart.map((date, index) => {
             const findDate = new Date(date);
-            const price: any = events.find((asset) => {
+            const price = events.find((asset) => {
               return (
                 asset.CurrencyAsset_Id === currency.name &&
                 new Date(asset.date) <= findDate
               );
             });
-            console.log("price", price);
-            console.log(result.data.prices[index][1]);
             return price
               ? price.lastState * result.data.prices[index][1]
               : resultPrice[index - 1] * result.data.prices[index][1];
           }),
+
           currency: currency.name,
         });
       })
     );
+
+    const usdAmount = timestamps.map((date, index) => {
+      const findDate = new Date(date);
+      const usdAmount = events.find((asset) => {
+        return new Date(asset.date) <= findDate;
+      });
+      return usdAmount?.lastUsdAmount;
+    });
+    console.log("usdAmount", usdAmount);
+
     zizi.forEach((a) => {
       a.price.reverse();
     });
@@ -92,7 +98,7 @@ class ChartService {
 
     currencies.reverse();
 
-    return { timestamps, currencies };
+    return { timestamps, currencies, usdAmount };
   }
 }
 
