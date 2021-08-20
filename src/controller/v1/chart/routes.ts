@@ -9,8 +9,9 @@ export default () => {
 
   router.get("/:walletId", async (req: Request, res: Response) => {
     try {
-      const chart = await CharServuce.getChart(req.params.walletId)
-      return res.status(200).json({ err: false, result:chart });
+      const chart = await CharServuce.getChart(req.params.walletId);
+      console.log("chart", chart);
+      return res.status(200).json({ err: false, result: chart });
     } catch (error) {
       logger.error(
         `[currencies/get/${JSON.stringify(req.body)}] - ${error.message}`

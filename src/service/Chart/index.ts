@@ -28,9 +28,12 @@ class ChartService {
     }
 
     const events = await getAllEvents(walletId);
-
+    console.log("events", events);
+    if (events.length === 0) {
+      return;
+    }
     const quantity = await getQuantity(walletId);
-    const currencies = quantity.map((currency) => {
+    const eventCurrencies = quantity.map((currency) => {
       return {
         currency: currency.Currency.symbol.toUpperCase(),
         name: currency.Currency_Id,
@@ -39,44 +42,57 @@ class ChartService {
 
     const startDate = await getMinDate(walletId);
 
-    const timestampsChart =
+    const timestamps =
       startDate.date && getArrayOfTimestamp(startDate.date, new Date());
     const zizi: any = [];
-    const currenciesWeighted:any = []
+    const currencies: any = [];
     await Promise.all(
-      currencies.map(async (currency) => {
-        const resultPrice:any = []
+      eventCurrencies.map(async (currency) => {
+        const resultPrice: any = [];
         const startAt = await findFirstEventByAsset(walletId, currency.name);
-        const timestamps = getArrayOfTimestamp(startAt.min, new Date())
+        const timestampsChart = getArrayOfTimestamp(startAt.min, new Date());
         const test = dateDiff(startAt.min, new Date());
-        const url = `https://api.coingecko.com/api/v3/coins/${currency.name}/market_chart?vs_currency=usd&days=${test}&interval=daily`;
+
+        const url = `https://api.coingecko.com/api/v3/coins/${
+          currency.name
+        }/market_chart?vs_currency=usd&days=${test + 1}&interval=daily`;
         const result = await axios.request({ url, method: "GET" });
         zizi.push({
-          timestamps: timestamps,
-          price: timestamps.map((date, index) => 
-                {
-                const findDate = new Date(date);
-                const price:any = events.find((asset) => {                
-                  return asset.CurrencyAsset_Id === currency.name && new Date(asset.date) <= findDate
-                })
-                return price ? price.lastState*result.data.prices[index][1] : resultPrice[index-1]*result.data.prices[index][1]
-              }),
+          timestampsChart: timestampsChart,
+          price: timestampsChart.map((date, index) => {
+            const findDate = new Date(date);
+            const price: any = events.find((asset) => {
+              return (
+                asset.CurrencyAsset_Id === currency.name &&
+                new Date(asset.date) <= findDate
+              );
+            });
+            console.log("price", price);
+            console.log(result.data.prices[index][1]);
+            return price
+              ? price.lastState * result.data.prices[index][1]
+              : resultPrice[index - 1] * result.data.prices[index][1];
+          }),
           currency: currency.name,
         });
-      }),
-    );
-
-    console.log('zizi',zizi)
-    zizi.forEach((a) => {
-      a.price.reverse()
-    })
-    timestampsChart.forEach((date,i) => {
-      zizi.forEach((caca) =>{   
-            currenciesWeighted[i] = currenciesWeighted[i] ? caca.price[i] ? currenciesWeighted[i] + caca.price[i] :  currenciesWeighted[i]: caca.price[i]            
-        })
       })
-    
-    return { timestampsChart,currenciesWeighted };
+    );
+    zizi.forEach((a) => {
+      a.price.reverse();
+    });
+    timestamps.forEach((date, i) => {
+      zizi.forEach((caca) => {
+        currencies[i] = currencies[i]
+          ? caca.price[i]
+            ? currencies[i] + caca.price[i]
+            : currencies[i]
+          : caca.price[i];
+      });
+    });
+
+    currencies.reverse();
+
+    return { timestamps, currencies };
   }
 }
 
