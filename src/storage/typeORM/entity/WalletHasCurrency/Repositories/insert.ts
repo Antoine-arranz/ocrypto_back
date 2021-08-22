@@ -1,5 +1,3 @@
-import { createQueryBuilder } from "typeorm";
-import getWalletsByUserId from "../../Wallet/Respositories/getWallets";
 import WalletHasCurrency from "../WalletHasCurrency";
 
 const insertCurrencyWallet = async (data: any): Promise<void> => {

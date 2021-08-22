@@ -33,7 +33,7 @@ class EventService {
   }
 
   public async getQuantityTotal(walletId: number): Promise<Array<any>> {
-    const events = await eventActions.getQuantity(walletId);
+    const events = await eventActions.getPositiveQuantity(walletId);
 
     return events;
   }

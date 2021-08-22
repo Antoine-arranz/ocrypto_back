@@ -32,7 +32,7 @@ export default class Event extends BaseEntity {
   amount: number;
 
   @Column("float", { nullable: true })
-  usd_amount: number;
+  usdAmount: number;
 
   @Column("float", { nullable: true })
   fees: number;

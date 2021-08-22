@@ -1,5 +1,5 @@
 import { WalletHasCurrency } from "../../../storage/typeORM/entity/WalletHasCurrency";
-import { getAll as getQuantity } from "../../../storage/typeORM/entity/WalletHasCurrency/Repositories";
+import { getAllPositive as getQuantity } from "../../../storage/typeORM/entity/WalletHasCurrency/Repositories";
 
 const getQuantityTotal = async (
   walletId: number

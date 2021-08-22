@@ -18,31 +18,23 @@ const addEvent = async (
   CurrencyCounterparty: string,
   fees?: number
 ) => {
+  let usdAssetAmount = amount;
+  let usdCounterPartyAmount;
   let usdAmountTotal;
   let currencyAssetNewState = quantity;
-  let currencyAssetNewCounterParty = amount;
-  let usdAssetAmount = amount;
-  let usdCounterpartAmount;
-  const currencyAssetLastState = await findLastState(walletId, CurrencyAsset);
+  let currencyAssetNewCounterPartyState = amount;
   let currencyCounterPartyLastState = await findLastState(
     walletId,
     CurrencyCounterparty
   );
-  if (currencyAssetLastState >= 0) {
+  const currencyAssetLastState = await findLastState(walletId, CurrencyAsset);
+  if (currencyAssetLastState && currencyAssetLastState.lastState >= 0) {
     currencyAssetNewState =
       eventType === "buy"
-        ? currencyAssetLastState + quantity
-        : currencyAssetLastState - quantity;
+        ? currencyAssetLastState.lastState + quantity
+        : currencyAssetLastState.lastState - quantity;
   }
 
-  if (CurrencyCounterparty !== "usd") {
-    if (currencyCounterPartyLastState >= 0) {
-      currencyAssetNewCounterParty =
-        eventType === "buy"
-          ? currencyCounterPartyLastState - amount
-          : currencyCounterPartyLastState + amount;
-    }
-  }
   const lastEvent = await getLastUsdAmount(walletId);
   const lastUsdAmount = lastEvent
     ? CurrencyCounterparty === "usd"
@@ -51,6 +43,15 @@ const addEvent = async (
     : amount;
 
   if (CurrencyCounterparty !== "usd") {
+    if (
+      currencyCounterPartyLastState &&
+      currencyCounterPartyLastState.lastState >= 0
+    ) {
+      currencyAssetNewCounterPartyState =
+        eventType === "buy"
+          ? currencyCounterPartyLastState.lastState - amount
+          : currencyCounterPartyLastState.lastState + amount;
+    }
     const dateFormated = new Date(eventDate)
       .toLocaleDateString("fr", {
         year: "numeric",
@@ -70,12 +71,15 @@ const addEvent = async (
     });
 
     usdAssetAmount =
-      currencyAsset.data.market_data.current_price.usd * currencyAssetNewState;
+      currencyAssetNewState > 0
+        ? currencyAsset.data.market_data.current_price.usd *
+          currencyAssetNewState
+        : currencyAssetLastState.usdAmount;
 
-    usdCounterpartAmount =
+    usdCounterPartyAmount =
       currencyCounterparty.data.market_data.current_price.usd * amount;
 
-    usdAmountTotal = lastUsdAmount - usdAssetAmount + usdCounterpartAmount;
+    usdAmountTotal = lastUsdAmount - usdAssetAmount + usdCounterPartyAmount;
   } else {
     usdAmountTotal = lastUsdAmount;
   }
@@ -109,11 +113,11 @@ const addEvent = async (
       CurrencyAsset_Id: CurrencyCounterparty,
       CurrencyCounterparty_Id: CurrencyAsset,
       fees,
-      currencyAssetNewState: currencyAssetNewCounterParty,
+      currencyAssetNewState: currencyAssetNewCounterPartyState,
       show: false,
-      lastState: currencyAssetNewCounterParty,
+      lastState: currencyAssetNewCounterPartyState,
       lastUsdAmount: usdAmountTotal,
-      usdAmount: usdCounterpartAmount,
+      usdAmount: usdCounterPartyAmount,
     });
   }
   await insertEvent(eventAdded);
