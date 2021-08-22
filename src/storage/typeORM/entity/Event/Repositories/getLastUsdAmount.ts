@@ -1,7 +1,9 @@
 import { Event } from "..";
 import { createQueryBuilder } from "typeorm";
 
-const getLastUsdAmount = async (walletId: number): Promise<any> => {
+const getLastUsdAmount = async (
+  walletId: number
+): Promise<{ Event_lastUsdAmount: number; max: Date }> => {
   const event = await createQueryBuilder(Event)
     .where("Event.Wallet_Id = :walletId", { walletId })
     .select(["max(Event.date)", "Event.lastUsdAmount"])

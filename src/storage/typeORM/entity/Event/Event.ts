@@ -46,7 +46,7 @@ export default class Event extends BaseEntity {
   @Column({ default: true })
   show: boolean;
 
-  @Column()
+  @Column("float")
   lastState: number;
 
   @Column("float")

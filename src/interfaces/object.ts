@@ -35,3 +35,20 @@ export interface UserUpdateI {
   firstName: string;
   country: string;
 }
+
+export interface newEvent {
+  Wallet_Id: number;
+  Platform_Id: number;
+  type: string;
+  date: Date;
+  quantity: number;
+  amount: number;
+  CurrencyAsset_Id: string;
+  CurrencyCounterparty_Id: string;
+  fees?: number;
+  lastState: number;
+  currencyAssetNewState: number;
+  lastUsdAmount: number;
+  usdAmount: number;
+  show?: boolean;
+}

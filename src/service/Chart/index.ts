@@ -1,5 +1,4 @@
 import { getFirstEvent } from "../../storage/typeORM/entity/Event/Repositories";
-import { getManager } from "typeorm";
 import { getQuantity } from "../Event/actions";
 import getAllEvents from "../Event/actions/getAll";
 import axios from "axios";
@@ -52,7 +51,9 @@ class ChartService {
         const timestampsChart = getArrayOfTimestamp(startAt.min, new Date());
         const dayDiff = dateDiff(startAt.min, new Date());
 
-        const url = `https://api.coingecko.com/api/v3/coins/${currency.name}/market_chart?vs_currency=usd&days=${dayDiff}&interval=daily`;
+        const url = `https://api.coingecko.com/api/v3/coins/${
+          currency.name
+        }/market_chart?vs_currency=usd&days=${dayDiff + 1}&interval=daily`;
         const result = await axios.request({ url, method: "GET" });
         zizi.push({
           timestampsChart,
@@ -73,7 +74,6 @@ class ChartService {
         });
       })
     );
-
     const usdAmount = timestamps.map((date, index) => {
       const findDate = new Date(date);
       const usdAmount = events.find((asset) => {
@@ -81,7 +81,6 @@ class ChartService {
       });
       return usdAmount?.lastUsdAmount;
     });
-    console.log("usdAmount", usdAmount);
 
     zizi.forEach((a) => {
       a.price.reverse();

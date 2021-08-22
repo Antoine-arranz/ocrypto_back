@@ -27,7 +27,7 @@ class EventService {
   }
 
   public async getEvents(walletId: number): Promise<Array<Event>> {
-    const events = await eventActions.getAll(walletId);
+    const events = await eventActions.getAllShowed(walletId);
 
     return events;
   }

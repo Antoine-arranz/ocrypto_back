@@ -10,8 +10,11 @@ export default class WalletHasCurrency extends BaseEntity {
   @Column({ primary: true })
   Currency_Id: string;
 
-  @Column()
+  @Column("float")
   currencyTotal: number;
+
+  @Column("float")
+  usdAmount: number;
 
   @ManyToOne(() => Wallet, (Wallet) => Wallet.WalletHasCurrencies, {
     primary: true,

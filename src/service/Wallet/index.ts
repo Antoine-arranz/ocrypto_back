@@ -5,6 +5,7 @@ import * as walletActions from "./actions";
 class WalletService {
   public async create(userId: number, name: string): Promise<Wallet> {
     const wallet = await walletActions.createWallet(userId, name);
+
     return wallet;
   }
 

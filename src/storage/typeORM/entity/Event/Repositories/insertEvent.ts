@@ -2,7 +2,7 @@ import { EventI } from "../../../../../interfaces/object";
 import { Event } from "..";
 import { createQueryBuilder } from "typeorm";
 
-const insertPlatforms = async (eventAdded: any): Promise<any> => {
+const insertEvent = async (eventAdded: any): Promise<any> => {
   const event = await createQueryBuilder(Event)
     .insert()
     .values(eventAdded)
@@ -11,4 +11,4 @@ const insertPlatforms = async (eventAdded: any): Promise<any> => {
   return event;
 };
 
-export default insertPlatforms;
+export default insertEvent;
