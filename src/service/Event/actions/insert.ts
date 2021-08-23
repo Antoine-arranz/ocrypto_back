@@ -23,10 +23,7 @@ const addEvent = async (
   let usdAmountTotal;
   let currencyAssetNewState = quantity;
   let currencyAssetNewCounterPartyState = amount;
-  let currencyCounterPartyLastState = await findLastState(
-    walletId,
-    CurrencyCounterparty
-  );
+
   const currencyAssetLastState = await findLastState(walletId, CurrencyAsset);
   if (currencyAssetLastState && currencyAssetLastState.lastState >= 0) {
     currencyAssetNewState =
@@ -42,6 +39,11 @@ const addEvent = async (
       ? lastEvent.lastUsdAmount + amount
       : lastEvent.lastUsdAmount
     : amount;
+
+  let currencyCounterPartyLastState = await findLastState(
+    walletId,
+    CurrencyCounterparty
+  );
 
   if (CurrencyCounterparty !== "usd") {
     if (
