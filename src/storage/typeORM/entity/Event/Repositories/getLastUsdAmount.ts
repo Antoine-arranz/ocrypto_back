@@ -3,14 +3,14 @@ import { createQueryBuilder } from "typeorm";
 
 const getLastUsdAmount = async (
   walletId: number
-): Promise<{ Event_lastUsdAmount: number; max: Date }> => {
+): Promise<Event | undefined> => {
   const event = await createQueryBuilder(Event)
     .where("Event.Wallet_Id = :walletId", { walletId })
-    .select(["max(Event.date)", "Event.lastUsdAmount"])
-    .groupBy("Event.lastUsdAmount")
-    .addGroupBy("Event.date")
+    .select(["Event.date", "Event.lastUsdAmount"])
+    .orderBy("Event.date", "DESC")
+    .limit(1)
+    .getOne();
 
-    .getRawOne();
   return event;
 };
 
