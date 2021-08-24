@@ -7,8 +7,6 @@ import {
   CreateDateColumn,
   ManyToOne,
   JoinColumn,
-  OneToMany,
-  OneToOne,
 } from "typeorm";
 import { Platform } from "../Platform";
 import { Currency } from "../Currency";

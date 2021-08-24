@@ -1,4 +1,3 @@
-import { createQueryBuilder } from "typeorm";
 import { Currency } from "../index";
 
 const getAllCurrencies = async (): Promise<Array<Currency>> => {
