@@ -33,7 +33,6 @@ const addEvent = async (
   }
 
   const lastEvent = await getLastUsdAmount(walletId);
-
   const lastUsdAmount = lastEvent
     ? CurrencyCounterparty === "usd"
       ? lastEvent.lastUsdAmount + amount

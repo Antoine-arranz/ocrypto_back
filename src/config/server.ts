@@ -5,6 +5,7 @@ import express from "express";
 import * as http from "http";
 import routing from "./routing";
 import logger from "./logger";
+import helmet from "helmet";
 
 export default () => {
   const app = express();
@@ -14,7 +15,7 @@ export default () => {
   const urlencodedParser = bodyParser.urlencoded({
     extended: true,
   });
-
+  apiRouter.use(helmet());
   apiRouter.use(cookieParser());
   apiRouter.use(urlencodedParser);
   apiRouter.use(bodyParser.json());
