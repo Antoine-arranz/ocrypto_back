@@ -17,10 +17,9 @@ const addEvent = async (
   CurrencyAsset: string,
   CurrencyCounterparty: string,
   fees?: number
-) => {
+):Promise<void> => {
   let usdAssetAmount = amount;
   let usdCounterPartyAmount;
-  let usdAmountTotal;
   let currencyAssetNewState = quantity;
   let currencyAssetNewCounterPartyState = amount;
 
@@ -62,6 +61,7 @@ const addEvent = async (
       })
       .split("/")
       .join("-");
+      
     const currencyCounterparty = await axios.request({
       url: `https://api.coingecko.com/api/v3/coins/${CurrencyCounterparty}/history?date=${dateFormated}`,
       method: "GET",
@@ -80,11 +80,7 @@ const addEvent = async (
 
     usdCounterPartyAmount =
       currencyCounterparty.data.market_data.current_price.usd * amount;
-
-    usdAmountTotal = lastUsdAmount - usdAssetAmount + usdCounterPartyAmount;
-  } else {
-    usdAmountTotal = lastUsdAmount;
-  }
+  } 
 
   let eventAdded: Array<newEvent> = [
     {
@@ -99,7 +95,7 @@ const addEvent = async (
       fees,
       lastState: currencyAssetNewState,
       currencyAssetNewState,
-      lastUsdAmount: usdAmountTotal,
+      lastUsdAmount: lastUsdAmount,
       usdAmount: usdAssetAmount,
     },
   ];
@@ -118,7 +114,7 @@ const addEvent = async (
       currencyAssetNewState: currencyAssetNewCounterPartyState,
       show: false,
       lastState: currencyAssetNewCounterPartyState,
-      lastUsdAmount: usdAmountTotal,
+      lastUsdAmount: lastUsdAmount,
       usdAmount: usdCounterPartyAmount,
     });
   }
