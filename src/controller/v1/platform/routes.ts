@@ -2,11 +2,12 @@ import express, { Request, Response } from "express";
 import logger from "../../../config/logger";
 import customErrorResponse from "../middlewares/customsErrorResponse";
 import Platform from "../../../service/Platform";
+import privateRoute from "../middlewares/privateRoute";
 export default () => {
   const PlatformService = new Platform();
 
   const router = express.Router({ mergeParams: true });
-
+  router.use(privateRoute);
   router.get("/insertPlatforms", async (req: Request, res: Response) => {
     try {
       const test = await PlatformService.insert();

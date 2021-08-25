@@ -3,11 +3,12 @@ import logger from "../../../config/logger";
 import customErrorResponse from "../middlewares/customsErrorResponse";
 import Event from "../../../service/Event";
 import { eventSchemas, generalSchemas } from "../../../interfaces/joi";
+import privateRoute from "../middlewares/privateRoute";
 export default () => {
   const EventService = new Event();
 
   const router = express.Router({ mergeParams: true });
-
+  router.use(privateRoute);
   router.post("/:walletId/add", async (req: Request, res: Response) => {
     try {
       const walletId = await generalSchemas.idSchema.validateAsync(

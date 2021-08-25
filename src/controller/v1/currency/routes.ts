@@ -2,11 +2,12 @@ import express, { Request, Response } from "express";
 import logger from "../../../config/logger";
 import customErrorResponse from "../middlewares/customsErrorResponse";
 import Currency from "../../../service/Currency";
+import privateRoute from "../middlewares/privateRoute";
 export default () => {
   const CurrencyService = new Currency();
 
   const router = express.Router({ mergeParams: true });
-
+  router.use(privateRoute);
   router.get("/", async (req: Request, res: Response) => {
     try {
       const currencies = await CurrencyService.getAllCurrencies();
