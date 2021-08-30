@@ -29,17 +29,20 @@ export default class Wallet extends BaseEntity {
 
   @Column()
   User_Id: number;
-  
+
   @ManyToOne(() => User, (User) => User.Wallets)
   @JoinColumn({ name: "User_Id" })
   User: User;
 
   @OneToMany(() => Event, (Event) => Event.Wallet, {
     onUpdate: "CASCADE",
-    onDelete: "RESTRICT",
+    onDelete: "CASCADE",
   })
   Event: Event[];
 
-  @OneToMany(() => WalletHasCurrency, (WalletHasCurrency) => WalletHasCurrency.Wallet)
+  @OneToMany(
+    () => WalletHasCurrency,
+    (WalletHasCurrency) => WalletHasCurrency.Wallet
+  )
   WalletHasCurrencies: WalletHasCurrency[];
 }

@@ -66,7 +66,10 @@ export default class Event extends BaseEntity {
   @JoinColumn({ name: "Platform_Id" })
   Platform: Platform;
 
-  @ManyToOne(() => Wallet, (Wallet) => Wallet.Event)
+  @ManyToOne(() => Wallet, (Wallet) => Wallet.Event, {
+    onUpdate: "CASCADE",
+    onDelete: "CASCADE",
+  })
   @JoinColumn({ name: "Wallet_Id" })
   Wallet: Wallet;
 

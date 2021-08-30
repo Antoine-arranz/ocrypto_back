@@ -38,7 +38,6 @@ export default () => {
       const user = await UserService.login(data);
       const payload = authToken(data.email);
       const token = await generateToken(payload);
-
       res.cookie("jwt", token, config.jwt.cookie);
 
       const response = {

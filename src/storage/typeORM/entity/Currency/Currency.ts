@@ -29,8 +29,11 @@ export default class Currency extends BaseEntity {
   Events: Event[];
 
   @OneToMany(() => Event, (event) => event.CurrencyCounterparty)
-  EventsA: Event[];
+  EventsCounterParty: Event[];
 
-  @OneToMany(() => WalletHasCurrency, (WalletHasCurrency) => WalletHasCurrency.Currency)
+  @OneToMany(
+    () => WalletHasCurrency,
+    (WalletHasCurrency) => WalletHasCurrency.Currency
+  )
   WalletHasCurrencies: WalletHasCurrency[];
 }
