@@ -38,12 +38,13 @@ const addEvent = async (
       : lastEvent.lastUsdAmount
     : amount;
 
+
+  if (CurrencyCounterparty !== "usd") {
+    
   let currencyCounterPartyLastState = await findLastState(
     walletId,
     CurrencyCounterparty
   );
-
-  if (CurrencyCounterparty !== "usd") {
     if (
       currencyCounterPartyLastState &&
       currencyCounterPartyLastState.lastState >= 0
