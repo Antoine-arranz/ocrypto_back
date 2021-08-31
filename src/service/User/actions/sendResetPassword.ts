@@ -17,7 +17,7 @@ const sendResetPassword = async (
   let mailOptions = {
     from: "ocryptozz@gmail.com",
     to: `antoine_arranz@hotmail.com`,
-    subject: "Contact request",
+    subject: "generate password",
     text: `Generate new password with this link : ${config.api.front.full}/reset-password/${token}`,
   };
 

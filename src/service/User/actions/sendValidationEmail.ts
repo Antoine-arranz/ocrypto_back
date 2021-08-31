@@ -17,7 +17,7 @@ const sendValidationEmail = async (
   let mailOptions = {
     from: "ocryptozz@gmail.com",
     to: `antoine_arranz@hotmail.com`,
-    subject: "Contact request",
+    subject: "Verify your email",
     text: `please verify your email with this link : ${config.api.front.full}/login/validate/${token}`,
   };
 
