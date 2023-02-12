@@ -1,0 +1,18 @@
+{
+   "type": "postgres",
+   "host": "localhost",
+   "port": 5432,
+   "username": "postgres",
+   "password": "postgres",
+   "database": "ocrypto",
+   "synchronize": true,
+   "logging": false,
+   "entities": [
+      "src/storage/typeORM/entity/**/*.ts"
+   ], 
+   "migrations" :["src/storage/model/migration/*.ts"],
+   "cli": {
+      "entitiesDir": "src/storage/model/entity",
+      "migrationsDir": "src/storage/model/migration"
+   }
+}
